@@ -4,17 +4,22 @@ import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.AutomationName;
 import io.appium.java_client.remote.MobileCapabilityType;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import java.net.URL;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static utils.TestRunner.printToLog;
@@ -33,8 +38,8 @@ public class BaseTest implements Action {
     @BeforeClass
     public void setup() {
 
-//        driver = getNewChromeWebDriver();
-        mobileDriver = getNewAndroidDriver();
+        driver = getNewChromeWebDriver();
+//        mobileDriver = getNewAndroidDriver();
 
     }
 
@@ -78,14 +83,6 @@ public class BaseTest implements Action {
         if (mobileDriver != null) {
             mobileDriver.quit();
         }
-    }
-
-    @Test
-    public void justAtest() {
-//        driver.get("https://shop.mydario.com/");
-        printToLog(String.valueOf(mobileDriver.getSessionDetails()));
-
-        assert true;
     }
 
 
