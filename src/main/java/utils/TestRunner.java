@@ -16,7 +16,7 @@ import java.net.InetAddress;
 
 public class TestRunner {
 
-    private static final String REPORTING_FILE_PATH = "/Documents/DarioHomeTask/test-output/difido/current/index.html";
+    private static final String REPORTING_FILE_PATH = "/Users/orenbroshi/IdeaProjects/darioHomeTask/test-output/difido/current/index.html";
     public static ReportDispatcher report = ReportManager.getInstance();
 
     public static void takeScreenShot(WebDriver driver) {
@@ -36,9 +36,9 @@ public class TestRunner {
 
     public static void openHtmlReportFile(boolean quitDriver, WebDriver driver) {
         try {
-            String machineName = InetAddress.getLocalHost().getHostName();
-            String currentUser = machineName.substring(0, machineName.indexOf("-"));
-            File htmlFile = new File("/Users/" + currentUser + REPORTING_FILE_PATH);
+//            String machineName = InetAddress.getLocalHost().getHostName();
+//            String currentUser = machineName.substring(0, machineName.indexOf("-"));
+            File htmlFile = new File(REPORTING_FILE_PATH);
 
             Desktop.getDesktop().browse(htmlFile.toURI());
             if (quitDriver){

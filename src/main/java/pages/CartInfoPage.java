@@ -19,7 +19,9 @@ public class CartInfoPage extends BaseWebPage {
     }
 
     public void printCartSummaryText() {
-        printToLog(summaryText.get(2).getText());
+        if (summaryText.size()> 0) {
+            printToLog(summaryText.get(2).getText());
+        }
     }
 
 

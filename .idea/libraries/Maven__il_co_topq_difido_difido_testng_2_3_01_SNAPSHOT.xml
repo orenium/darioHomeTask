@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: il.co.topq.difido:difido-testng:2.3.01-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/il/co/topq/difido/difido-testng/2.3.01-SNAPSHOT/difido-testng-2.3.01-20190626.145551-1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/il/co/topq/difido/difido-testng/2.3.01-SNAPSHOT/difido-testng-2.3.01-20190626.145551-1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/il/co/topq/difido/difido-testng/2.3.01-SNAPSHOT/difido-testng-2.3.01-20190626.145551-1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
