@@ -4,25 +4,19 @@ import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.AutomationName;
 import io.appium.java_client.remote.MobileCapabilityType;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
-import org.testng.annotations.Test;
 
 import java.net.URL;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static utils.TestRunner.printToLog;
+import static utils.TestRunner.*;
 
 @Listeners(il.co.topq.difido.ReportManagerHook.class)
 public class BaseTest implements Action {
@@ -30,7 +24,7 @@ public class BaseTest implements Action {
     public WebDriver driver = null;
     public MobileDriver mobileDriver;
     private static final String APPIUM_LOCALHOST_URL = "http://localhost:4723/wd/hub";
-//    private static final String APP_PATH = "/Users/obroshi/Documents/DarioHomeTask/src/main/resources/Dario.apk";
+    //    private static final String APP_PATH = "/Users/obroshi/Documents/DarioHomeTask/src/main/resources/Dario.apk";
     private static final String APP_PATH = "/Users/obroshi/Documents/DarioHomeTask/src/main/resources/apps.zip";
     private static final String APP_PACKAGE = "com.labstyle.darioandroid";
     private static final String APP_ACTIVITY = "net.hockyapp.android.LoginActivity";
@@ -56,7 +50,7 @@ public class BaseTest implements Action {
             capabilities.setCapability(MobileCapabilityType.APP, APP_PATH);
             capabilities.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, APP_ACTIVITY);
 
-            androidDriver  = new AndroidDriver(new URL(APPIUM_LOCALHOST_URL), capabilities);
+            androidDriver = new AndroidDriver(new URL(APPIUM_LOCALHOST_URL), capabilities);
             mobileDriver.installApp("/Users/johndoe/path/to/app.apk");
             mobileDriver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
@@ -77,12 +71,14 @@ public class BaseTest implements Action {
     @AfterClass
     public void afterClass() {
         if (driver != null) {
-            driver.quit();
+            takeScreenShot(driver);
+            openHtmlReportFile(true, driver);
         }
 
         if (mobileDriver != null) {
             mobileDriver.quit();
         }
+
     }
 
 
