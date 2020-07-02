@@ -72,7 +72,7 @@ public class BaseTest implements Action {
     public void afterClass() {
         if (driver != null) {
             takeScreenShot(driver);
-            openHtmlReportFile(true, driver);
+            openHtmlReportFile(false, driver);
         }
 
         if (mobileDriver != null) {
@@ -84,5 +84,11 @@ public class BaseTest implements Action {
 
     public void perform() {
 
+    }
+
+    public void openURL(String url) {
+        if (driver != null) {
+            driver.get(url);
+        }
     }
 }

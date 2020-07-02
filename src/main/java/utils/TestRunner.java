@@ -41,7 +41,7 @@ public class TestRunner {
             File htmlFile = new File(REPORTING_FILE_PATH);
 
             Desktop.getDesktop().browse(htmlFile.toURI());
-            if (quitDriver){
+            if (quitDriver) {
                 driver.quit();
             }
         } catch (Exception ex) {
@@ -49,7 +49,7 @@ public class TestRunner {
         }
     }
 
-    public static void printToLog(String content){
+    public static void printToLog(String content) {
         report.log(content);
     }
 

@@ -13,18 +13,18 @@ import static utils.TestRunner.printToLog;
 public abstract class BaseWebPage {
 
     protected WebDriver driver;
-
+    public WebDriverWait wait;
 
     public BaseWebPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
+        wait = new WebDriverWait(driver, 10);
     }
 
     protected boolean waitForPageToload(By bySelector) {
         boolean isLoaded = false;
 
         try {
-            WebDriverWait wait = new WebDriverWait(driver, 10);
             wait.until(ExpectedConditions.presenceOfElementLocated(bySelector));
             isLoaded = true;
         } catch (Exception ex) {
