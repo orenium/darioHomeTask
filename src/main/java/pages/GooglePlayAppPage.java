@@ -1,6 +1,5 @@
 package pages;
 
-import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -32,25 +31,19 @@ public class GooglePlayAppPage extends BasePage {
                 if (button.getText().equalsIgnoreCase("install")) {
                     button.click();
                     printToLog("Installing dario app...");
+                    WebDriverWait wait = new WebDriverWait(mobileDriver, 120);
+                    wait.until(ExpectedConditions.elementToBeClickable(openAppBtn)).click();
+                    printToLog("Dario app was successfully installed!");
+                    Thread.sleep(10000);
+                    isInstalled = true;
+                    break;
+                } else if (button.getText().equalsIgnoreCase("open")) {
+                    button.click();
+                    printToLog("Opening Dario app..");
                     isInstalled = true;
                     break;
                 }
             }
-            WebDriverWait wait = new WebDriverWait(mobileDriver, 120);
-            wait.until(ExpectedConditions.elementToBeClickable(openAppBtn)).click();
-            printToLog("Opening Dario app..");
-//            buttons = mobileDriver.findElements(MobileBy.className("android.widget.Button"));
-//            for (int i = 0; i < 3; i++) {
-//                for (WebElement button : buttons) {
-//                    if (button.getText().equalsIgnoreCase("Uinstall")) {
-//                        printToLog("APP INSTALLED!!");
-//                        printToLog("Installing dario app...");
-//                        isInstalled = true;
-//                        break;
-//                    }
-//                }
-//                Thread.sleep(1000);
-//            }
         } catch (Exception ex) {
             printToLog("GooglePlayAppPage.installApp: " + ex.getMessage());
         }

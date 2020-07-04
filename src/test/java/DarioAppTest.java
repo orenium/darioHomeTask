@@ -1,7 +1,5 @@
 import org.testng.annotations.Test;
-import pages.GooglePlayAppPage;
-import pages.GooglePlayMainPage;
-import pages.GooglePlaySearchResultsPage;
+import pages.*;
 
 public class DarioAppTest extends BaseTest {
     //    private GoogleHomePage googleHomePage;
@@ -9,6 +7,11 @@ public class DarioAppTest extends BaseTest {
     private GooglePlayMainPage googlePlayAppPage;
     private GooglePlaySearchResultsPage resultsPage;
     private GooglePlayAppPage appPage;
+    private DarioWelcomePage welcomePage;
+    private DarioLoginPage loginPage;
+
+    private final String EMAIL = "obroshi83@gmail.com";
+    private final String PASSWORD = "Orenb1983";
 
 
     @Test
@@ -21,8 +24,11 @@ public class DarioAppTest extends BaseTest {
         googlePlayAppPage = new GooglePlayMainPage(mobileDriver);
         resultsPage = googlePlayAppPage.searchAnApp("dario");
         appPage = resultsPage.selectDarioApp();
-        appPage.installApp();
-        System.out.println("Ended");
+        if (appPage.installApp()) {
+            welcomePage = new DarioWelcomePage(mobileDriver);
+            loginPage = welcomePage.swipeTutorial();
+        }
+        loginPage.login(EMAIL,PASSWORD);
 
 
     }

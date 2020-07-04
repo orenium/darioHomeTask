@@ -22,8 +22,6 @@ public class GooglePlaySearchResultsPage extends BasePage{
         if (resultsContainer.isDisplayed()){
             resultsContainer.findElement(By.className("android.widget.LinearLayout")).click();
         }
-//        wait.until(ExpectedConditions.presenceOfElementLocated(darioResult)).click();
-//        darioResult.click();
         TestRunner.printToLog("Dario app was selected");
         return new GooglePlayAppPage(mobileDriver);
     }

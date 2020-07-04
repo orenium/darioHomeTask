@@ -16,6 +16,7 @@ import org.testng.annotations.Listeners;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
+import static io.appium.java_client.remote.AndroidMobileCapabilityType.AUTO_GRANT_PERMISSIONS;
 import static utils.TestRunner.*;
 
 @Listeners(il.co.topq.difido.ReportManagerHook.class)
@@ -25,7 +26,6 @@ public class BaseTest implements Action {
     public MobileDriver mobileDriver;
     private static final String APPIUM_LOCALHOST_URL = "http://localhost:4723/wd/hub";
     private static final String APP_PATH = "/Users/orenbroshi/IdeaProjects/darioHomeTask/src/main/resources/base.apk";
-    //    private static final String APP_PATH = "/Users/obroshi/Documents/DarioHomeTask/src/main/resources/apps.zip";
     private static final String APP_PACKAGE = "com.android.vending";
     private static final String APP_ACTIVITY = "com.google.android.finsky.activities.MainActivity";
     boolean isRealDevice = Boolean.parseBoolean(System.getProperty("isRealDevice"));
@@ -60,7 +60,8 @@ public class BaseTest implements Action {
 //            capabilities.setCapability(AndroidMobileCapabilityType.APPLICATION_NAME, " ");
 //            capabilities.setCapability(AndroidMobileCapabilityType.BROWSER_NAME, "Chrome");
 //            capabilities.setCapability("chromedriverExecutable", "/Users/orenbroshi/IdeaProjects/darioHomeTask/src/main/resources/chromedriver");
-//            capabilities.setCapability(MobileCapabilityType.NO_RESET, false);
+            capabilities.setCapability(AUTO_GRANT_PERMISSIONS, "true");
+            capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
 
             mobileDriver = new AndroidDriver(new URL(APPIUM_LOCALHOST_URL), capabilities);
             mobileDriver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
