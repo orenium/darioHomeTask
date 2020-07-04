@@ -21,14 +21,14 @@ public abstract class BaseWebPage {
         wait = new WebDriverWait(driver, 10);
     }
 
-    protected boolean waitForPageToload(By bySelector) {
+    protected boolean waitForPageToLoad(By bySelector) {
         boolean isLoaded = false;
 
         try {
             wait.until(ExpectedConditions.presenceOfElementLocated(bySelector));
             isLoaded = true;
         } catch (Exception ex) {
-            printToLog("baseWebPage.waitForPageToload: " + ex.getMessage());
+            printToLog("baseWebPage.waitForPageToLoad: " + ex.getMessage());
         }
 
         return isLoaded;

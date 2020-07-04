@@ -11,8 +11,13 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
 import java.awt.*;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestRunner {
 
@@ -36,8 +41,6 @@ public class TestRunner {
 
     public static void openHtmlReportFile(boolean quitDriver, WebDriver driver) {
         try {
-//            String machineName = InetAddress.getLocalHost().getHostName();
-//            String currentUser = machineName.substring(0, machineName.indexOf("-"));
             File htmlFile = new File(REPORTING_FILE_PATH);
 
             Desktop.getDesktop().browse(htmlFile.toURI());
@@ -45,7 +48,7 @@ public class TestRunner {
                 driver.quit();
             }
         } catch (Exception ex) {
-            System.out.println("BaseTest.openReportHtmlFile: " + ex.getMessage());
+            printToLog("BaseTest.openReportHtmlFile: " + ex.getMessage());
         }
     }
 
@@ -53,7 +56,30 @@ public class TestRunner {
         report.log(content);
     }
 
+    public static java.util.List<String> getAllConnectedDevices() {
+        String line;
+        List<String> connectedDevices = new ArrayList<String>();
+        try {
+            Runtime rt = java.lang.Runtime.getRuntime();
+            // Start a new process: UNIX command ls
+            Process p = rt.exec("adb devices");
+            // Get process’ output: its InputStream
+            InputStream is = p.getInputStream();
+            BufferedReader reader = new java.io.BufferedReader(new InputStreamReader(is));
+            // And print each line
+            line = (reader.readLine());
+            while ((line = reader.readLine()) != null) {
+                if (line.contains("device")) {
+                    connectedDevices.add(line.split(" ")[0]);
+                }
+            }
+            is.close();
 
+        } catch (Exception ex) {
+            printToLog("BaseTest.getAllConnectedDevices: " + ex.getMessage());
+        }
+        return connectedDevices;
+    }
 
 
 }

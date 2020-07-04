@@ -12,7 +12,7 @@ import java.util.List;
 
 import static utils.TestRunner.printToLog;
 
-public class CartInfoPage extends BaseWebPage {
+public class CartInfoWebPage extends BaseWebPage {
     @FindAll({
             @FindBy(css = "strong")})
     public List<WebElement> summaryText;
@@ -56,10 +56,10 @@ public class CartInfoPage extends BaseWebPage {
 
     private WebDriverWait wait;
 
-    public CartInfoPage(WebDriver driver) {
+    public CartInfoWebPage(WebDriver driver) {
         super(driver);
         wait = new WebDriverWait(driver, 10);
-        waitForPageToload(new By.ByCssSelector("button#place_order"));
+        waitForPageToLoad(new By.ByCssSelector("button#place_order"));
     }
 
     public void printCartSummaryText() {
@@ -68,13 +68,13 @@ public class CartInfoPage extends BaseWebPage {
         }
     }
 
-    public CheckoutAndPayPage placeOrder() {
-        CheckoutAndPayPage checkoutAndPayPage = null;
+    public CheckoutAndPayWebPage placeOrder() {
+        CheckoutAndPayWebPage checkoutAndPayPage = null;
         try {
             wait.until(ExpectedConditions.visibilityOf(placeOrderBtn)).click();
             if (isVerifiedInputs()) {
                 printToLog("All fields are ok! Submitting order...");
-                checkoutAndPayPage = new CheckoutAndPayPage(driver);
+                checkoutAndPayPage = new CheckoutAndPayWebPage(driver);
             } else {
                 printToLog("Unable to complete order, some inputs are invalid!");
             }
@@ -155,10 +155,11 @@ public class CartInfoPage extends BaseWebPage {
             } else if (errorMsg.equalsIgnoreCase("Zip Code is required")) {
                 inputZipcode.sendKeys("90011");
             } else if (errorMsg.equalsIgnoreCase("Email is required")) {
-                inputEmail.sendKeys("list.d@yahoo.com");
+                inputEmail.sendKeys("obrodi20@gmail.com");
             } else if (errorMsg.equalsIgnoreCase("Cell Phone is required")) {
                 inputpPhone.sendKeys("5676533");
             }
+            Thread.sleep(700);
         } catch (Exception ex) {
             printToLog("CartInfoPage.insertValidDataField: " + ex.getMessage());
         }

@@ -1,20 +1,19 @@
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import pages.CartInfoPage;
-import pages.CheckoutAndPayPage;
-import pages.DarioShopHomePage;
-import utils.TestRunner;
+import pages.CartInfoWebPage;
+import pages.CheckoutAndPayWebPage;
+import pages.DarioShopHomeWebPage;
 import utils.URLs;
 
 public class AddToCartTest extends BaseTest {
-    private DarioShopHomePage darioShopHomePage;
-    private CartInfoPage cartInfoPage;
-    private CheckoutAndPayPage checkoutAndPayPage;
+    private DarioShopHomeWebPage darioShopHomePage;
+    private CartInfoWebPage cartInfoPage;
+    private CheckoutAndPayWebPage checkoutAndPayPage;
 
     @Test
     public void addItemToCartTest() throws InterruptedException {
-        openURL(URLs.DARIO_SHOP_URL);
-        darioShopHomePage = new DarioShopHomePage(driver);
+        openURL(driver, URLs.DARIO_SHOP_URL);
+        darioShopHomePage = new DarioShopHomeWebPage(driver);
         darioShopHomePage.addRandomProductToCart();
 
 //        Assert.assertTrue(darioShopHomePage.getNumItemsInCart() > 0);

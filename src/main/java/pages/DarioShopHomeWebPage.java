@@ -6,14 +6,13 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 import java.util.Random;
 
 import static utils.TestRunner.printToLog;
 
-public class DarioShopHomePage extends BaseWebPage {
+public class DarioShopHomeWebPage extends BaseWebPage {
 
     @FindAll({
             @FindBy(css = "section.section-products.bg-gray [class='add-to-cart-button']")})
@@ -33,7 +32,7 @@ public class DarioShopHomePage extends BaseWebPage {
             @FindBy(css = "label.btn.change-meter-popup.flex-grow-1.mx-2.px-0.pb-0")})
     public List<WebElement> connectorTypeOption;
 
-    public DarioShopHomePage(WebDriver driver) {
+    public DarioShopHomeWebPage(WebDriver driver) {
         super(driver);
     }
 
@@ -82,11 +81,11 @@ public class DarioShopHomePage extends BaseWebPage {
         return cartItems;
     }
 
-    public CartInfoPage openCartInfoPage() {
+    public CartInfoWebPage openCartInfoPage() {
         if (cartIcon.isDisplayed()) {
             cartIcon.click();
         }
-        return new CartInfoPage(driver);
+        return new CartInfoWebPage(driver);
     }
 
 

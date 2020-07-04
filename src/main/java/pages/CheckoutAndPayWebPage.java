@@ -6,20 +6,19 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import utils.TestRunner;
 
 import static utils.TestRunner.printToLog;
 
-public class CheckoutAndPayPage extends BaseWebPage {
+public class CheckoutAndPayWebPage extends BaseWebPage {
 
     @FindBy(css = "button#place_order")
     public WebElement submitOrderBtn;
 
     private static final By selectPaypalBtn = By.cssSelector("label[for='payment_method_paypal']");
 
-    public CheckoutAndPayPage(WebDriver driver) {
+    public CheckoutAndPayWebPage(WebDriver driver) {
         super(driver);
-        waitForPageToload(selectPaypalBtn);
+        waitForPageToLoad(selectPaypalBtn);
     }
 
     public boolean selectPaypal() {
@@ -44,6 +43,7 @@ public class CheckoutAndPayPage extends BaseWebPage {
             if (submitOrderBtn.isDisplayed()) {
                 submitOrderBtn.click();
                 isSubmitted = true;
+                Thread.sleep(3000);
             }
         } catch (Exception ex) {
             printToLog("CheckoutAndPayPage.submitOrder: "+ ex.getMessage());
