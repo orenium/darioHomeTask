@@ -71,11 +71,11 @@ public abstract class BasePage {
                 case LEFT:
                     startY = endY = windowHeight / 2;
                     startX = (int) (windowWidth * 0.9);
-                    endX = (int) (windowWidth * 0.2);
+                    endX = (int) (windowWidth * 0.1);
                     break;
                 case RIGHT:
                     startY = endY = windowHeight / 2;
-                    startX = (int) (windowWidth * 0.2);
+                    startX = (int) (windowWidth * 0.1);
                     endX = (int) (windowWidth * 0.9);
                     break;
                 default:

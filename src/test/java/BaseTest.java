@@ -32,9 +32,8 @@ public class BaseTest implements Action {
 
     @BeforeClass
     public void setup() {
-//        driver = getNewChromeWebDriver();
+        driver = getNewChromeWebDriver();
         mobileDriver = getNewAndroidDriver();
-
     }
 
     private AndroidDriver getNewAndroidDriver() {
@@ -69,8 +68,6 @@ public class BaseTest implements Action {
         } catch (Exception ex) {
             printToLog("BaseTest.getNewAndroidDriver: " + ex.getMessage());
         }
-
-
         return (AndroidDriver) mobileDriver;
     }
 
@@ -84,13 +81,11 @@ public class BaseTest implements Action {
     public void afterClass() {
         if (driver != null) {
             takeScreenShot(driver);
-            openHtmlReportFile(true, driver);
         }
-
         if (mobileDriver != null) {
             takeScreenShot(mobileDriver);
-            openHtmlReportFile(true, mobileDriver);
         }
+        openHtmlReportFile(true, driver);
 
     }
 

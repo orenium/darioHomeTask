@@ -3,19 +3,25 @@ package utils;
 import il.co.topq.difido.ReportDispatcher;
 import il.co.topq.difido.ReportManager;
 import il.co.topq.difido.model.Enums;
+import io.appium.java_client.MobileDriver;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.nativekey.AndroidKey;
+import io.appium.java_client.android.nativekey.KeyEvent;
+import io.appium.java_client.android.nativekey.KeyEventMetaModifier;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,9 +48,8 @@ public class TestRunner {
     public static void openHtmlReportFile(boolean quitDriver, WebDriver driver) {
         try {
             File htmlFile = new File(REPORTING_FILE_PATH);
-
             Desktop.getDesktop().browse(htmlFile.toURI());
-            if (quitDriver) {
+            if (quitDriver && driver != null) {
                 driver.quit();
             }
         } catch (Exception ex) {
@@ -79,6 +84,44 @@ public class TestRunner {
             printToLog("BaseTest.getAllConnectedDevices: " + ex.getMessage());
         }
         return connectedDevices;
+    }
+
+    public static void sendKeysAsChars(WebElement webElement, String str) {
+        if (webElement != null && str.length() != 0) {
+            webElement.click();
+            for (int i = 0; i < str.length(); i++) {
+                char c = str.charAt(i);
+                System.out.println(c);
+                String s = new StringBuilder().append(c).toString();
+                System.out.println(s);
+                webElement.sendKeys(s);
+            }
+        }
+    }
+
+    public static int getCharKeyCode(String str) {
+        KeyStroke ks = null;
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            ks = KeyStroke.getKeyStroke(c, 0);
+            System.out.println(c + " : " + ks.getKeyCode());
+        }
+        return ks.getKeyCode();
+    }
+
+    public static void sendKeyByVirtualKeyboard(MobileDriver driver) {
+        //todo: change this to be generic
+        if (driver != null) {
+            ((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.O).withMetaModifier(KeyEventMetaModifier.SHIFT_ON));
+            ((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.R));
+            ((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.E));
+            ((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.N));
+            ((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.B));
+            ((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.DIGIT_1));
+            ((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.DIGIT_9));
+            ((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.DIGIT_8));
+            ((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.DIGIT_3));
+        }
     }
 
 

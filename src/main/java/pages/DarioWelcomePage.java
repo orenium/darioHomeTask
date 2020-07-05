@@ -1,6 +1,8 @@
 package pages;
 
+import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileDriver;
+import io.appium.java_client.MobileElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -19,9 +21,13 @@ public class DarioWelcomePage extends BasePage {
 
     public DarioLoginPage swipeTutorial() {
         try {
-            for (int i = 0; i < 9; i++) {
-                swipe(SwipeDirection.LEFT);
-            }
+//            for (int i = 0; i < 9; i++) {
+//                swipe(SwipeDirection.LEFT);
+//            }
+            do {
+                Thread.sleep(3000);
+                swipe(SwipeDirection.RIGHT);
+            } while (!loginBtn.isDisplayed());
             wait.until(ExpectedConditions.visibilityOf(loginBtn)).click();
             printToLog("Tutorial finished");
         } catch (Exception ex) {
@@ -29,4 +35,5 @@ public class DarioWelcomePage extends BasePage {
         }
         return new DarioLoginPage(mobileDriver);
     }
+
 }

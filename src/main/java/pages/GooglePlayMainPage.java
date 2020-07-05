@@ -13,7 +13,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 
-import static utils.TestRunner.printToLog;
+import static utils.TestRunner.*;
 
 public class GooglePlayMainPage extends BasePage {
 
@@ -25,11 +25,13 @@ public class GooglePlayMainPage extends BasePage {
 
     public GooglePlayMainPage(MobileDriver driver) {
         super(driver);
+        printToLog("Opening Google Play store");
     }
 
     public GooglePlaySearchResultsPage searchAnApp(String appToFind){
 
         try{
+            printToLog("App to find: "+ appToFind);
             wait.until(ExpectedConditions.elementToBeClickable(searchBar)).click();
             wait.until(ExpectedConditions.elementToBeClickable(searchBarInput)).sendKeys(appToFind);
             if (mobileDriver instanceof AndroidDriver) {

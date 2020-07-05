@@ -8,7 +8,7 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
-import static utils.TestRunner.printToLog;
+import static utils.TestRunner.*;
 
 public class DarioLoginPage extends BasePage {
 
@@ -27,9 +27,13 @@ public class DarioLoginPage extends BasePage {
         boolean isLoggedIn = false;
         if (inputFields.size() > 0) {
             inputFields.get(0).click();
+
             inputFields.get(0).sendKeys(email);
+
             inputFields.get(1).click();
-            inputFields.get(1).sendKeys(pass);
+            sendKeyByVirtualKeyboard(mobileDriver);
+//            sendKeysAsChars(inputFields.get(1),pass);
+
             List<WebElement> frameLayouts = mobileDriver.findElements(By.className("android.widget.FrameLayout"));
             printToLog("Logging in with email: " + email + "  |   Password: " + pass);
             frameLayouts.get(5).click();   // Login button
@@ -37,4 +41,6 @@ public class DarioLoginPage extends BasePage {
         }
         return isLoggedIn;
     }
+
+
 }
