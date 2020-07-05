@@ -4,6 +4,9 @@ import io.appium.java_client.MobileDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import utils.MeasurementType;
+
+import static utils.TestRunner.printToLog;
 
 public class DarioAppMainPage extends BasePage {
 
@@ -13,14 +16,37 @@ public class DarioAppMainPage extends BasePage {
     @FindBy(id = "com.labstyle.darioandroid:id/plusGlucoseLayout")
     public WebElement plusBloodSugarOption;
 
+    @FindBy(id = "com.labstyle.darioandroid:id/fetValue")
+    public WebElement avgBloodGlucoseValue;
+
     public DarioAppMainPage(MobileDriver mobileDriver) {
         super(mobileDriver);
     }
 
-    public void takeMeasurement(){
+    public DarioDataEntryPage takeMeasurement(MeasurementType measurementType) {
         wait.until(ExpectedConditions.visibilityOf(plusBtn)).click();
-        wait.until(ExpectedConditions.visibilityOf(plusBloodSugarOption)).click();
+        switch (measurementType) {
+            case BLOOD_SUGAR:
+                wait.until(ExpectedConditions.visibilityOf(plusBloodSugarOption)).click();
+                break;
+            case BLOOD_PRESSURE:
+                break;
+            case WEIGHT:
+                break;
+            default:
 
+                printToLog("Taking " + measurementType.toString() + "measurement");
+        }
+        return new DarioDataEntryPage(mobileDriver);
+    }
+
+    public int getAvgBloodGlucoseValue() {
+        if (avgBloodGlucoseValue.isDisplayed()) {
+            return Integer.parseInt(avgBloodGlucoseValue.getText());
+        } else {
+            printToLog("Unable fo get avg Blood Glucose Value");
+        }
+        return -1;
     }
 
 

@@ -13,6 +13,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
@@ -32,7 +33,7 @@ public class BaseTest implements Action {
 
     @BeforeClass
     public void setup() {
-        driver = getNewChromeWebDriver();
+//        driver = getNewChromeWebDriver();
         mobileDriver = getNewAndroidDriver();
     }
 
@@ -49,7 +50,7 @@ public class BaseTest implements Action {
                 }
             } else {   // Emulator
                 capabilities.setCapability(MobileCapabilityType.UDID, "emulator-5554");
-                capabilities.setCapability(AndroidMobileCapabilityType.AVD, "Pixel_2");
+                capabilities.setCapability(AndroidMobileCapabilityType.AVD, "Nexus_5X");
             }
             capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, Platform.ANDROID);
             capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, AutomationName.ANDROID_UIAUTOMATOR2);
@@ -60,7 +61,7 @@ public class BaseTest implements Action {
 //            capabilities.setCapability(AndroidMobileCapabilityType.BROWSER_NAME, "Chrome");
 //            capabilities.setCapability("chromedriverExecutable", "/Users/orenbroshi/IdeaProjects/darioHomeTask/src/main/resources/chromedriver");
             capabilities.setCapability(AUTO_GRANT_PERMISSIONS, "true");
-            capabilities.setCapability(MobileCapabilityType.NO_RESET, true);
+            capabilities.setCapability(MobileCapabilityType.NO_RESET, false);
 
             mobileDriver = new AndroidDriver(new URL(APPIUM_LOCALHOST_URL), capabilities);
             mobileDriver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
@@ -83,10 +84,20 @@ public class BaseTest implements Action {
             takeScreenShot(driver);
         }
         if (mobileDriver != null) {
+            clearDarioAppDate();
             takeScreenShot(mobileDriver);
         }
         openHtmlReportFile(true, driver);
 
+    }
+
+    private void clearDarioAppDate() {
+        try {
+            Runtime runtime = Runtime.getRuntime();
+            runtime.exec("adb shell pm clear com.labstyle.darioandroid");
+        } catch (IOException e) {
+            printToLog("BaseTesl.clearDarioAppDate: "+ e.getMessage());
+        }
     }
 
 

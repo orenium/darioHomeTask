@@ -88,12 +88,9 @@ public class TestRunner {
 
     public static void sendKeysAsChars(WebElement webElement, String str) {
         if (webElement != null && str.length() != 0) {
-            webElement.click();
             for (int i = 0; i < str.length(); i++) {
                 char c = str.charAt(i);
-                System.out.println(c);
                 String s = new StringBuilder().append(c).toString();
-                System.out.println(s);
                 webElement.sendKeys(s);
             }
         }
@@ -109,7 +106,7 @@ public class TestRunner {
         return ks.getKeyCode();
     }
 
-    public static void sendKeyByVirtualKeyboard(MobileDriver driver) {
+    public static void sendKeyByVirtualKeyboard(MobileDriver driver) throws InterruptedException {
         //todo: change this to be generic
         if (driver != null) {
             ((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.O).withMetaModifier(KeyEventMetaModifier.SHIFT_ON));

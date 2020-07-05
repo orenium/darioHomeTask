@@ -11,7 +11,7 @@ public class AddToCartTest extends BaseTest {
     private CheckoutAndPayWebPage checkoutAndPayPage;
 
     @Test
-    public void addItemToCartTest() throws InterruptedException {
+    public void addItemToCartTest() {
         openURL(driver, URLs.DARIO_SHOP_URL);
         darioShopHomePage = new DarioShopHomeWebPage(driver);
         darioShopHomePage.addRandomProductToCart();

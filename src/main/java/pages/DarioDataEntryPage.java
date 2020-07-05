@@ -5,6 +5,7 @@ import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.time.Duration;
 
@@ -18,6 +19,11 @@ public class DarioDataEntryPage extends BasePage {
     @FindBy(id = "com.labstyle.darioandroid:id/done_button")
     public WebElement doneBtn;
 
+    @FindBy(id = "com.labstyle.darioandroid:id/fetValue")
+    public WebElement valueElement;
+
+    @FindBy(id = "com.labstyle.darioandroid:id/rule")
+    public WebElement valueSlider;
 
     public DarioDataEntryPage(MobileDriver mobileDriver) {
         super(mobileDriver);
@@ -54,6 +60,17 @@ public class DarioDataEntryPage extends BasePage {
         }
     }
 
+    public DarioAppMainPage addNewValue(){
+
+        try{
+            wait.until(ExpectedConditions.elementToBeClickable(addBtn)).click();
+            doneBtn.click();
+            printToLog("Value: " + valueElement.getText() + " was recorded");
+        } catch (Exception ex){
+            printToLog("DarioDataEntryPage.addNewValue: "+ ex.getMessage());
+        }
+        return new DarioAppMainPage(mobileDriver);
+    }
 
 }
 

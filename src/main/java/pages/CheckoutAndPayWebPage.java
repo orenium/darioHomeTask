@@ -43,7 +43,7 @@ public class CheckoutAndPayWebPage extends BaseWebPage {
             if (submitOrderBtn.isDisplayed()) {
                 submitOrderBtn.click();
                 isSubmitted = true;
-                Thread.sleep(3000);
+                Thread.sleep(5000);
             }
         } catch (Exception ex) {
             printToLog("CheckoutAndPayPage.submitOrder: "+ ex.getMessage());

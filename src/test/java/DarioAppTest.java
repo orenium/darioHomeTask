@@ -1,14 +1,18 @@
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.*;
+import utils.MeasurementType;
 
 public class DarioAppTest extends BaseTest {
-    //    private GoogleHomePage googleHomePage;
-//    private GoogleSearchResultsPage resultsPage;
-    private GooglePlayMainPage googlePlayAppPage;
-    private GooglePlaySearchResultsPage resultsPage;
-    private GooglePlayAppPage appPage;
-    private DarioWelcomePage welcomePage;
-    private DarioLoginPage loginPage;
+
+    GooglePlayMainPage googlePlayAppPage;
+    GooglePlaySearchResultsPage resultsPage;
+    GooglePlayAppPage appPage;
+    DarioWelcomePage welcomePage;
+    DarioLoginPage loginPage;
+    LoginWIthFacebookPage facebookPage;
+    DarioAppMainPage appMainPage;
+    DarioDataEntryPage dataEntryPage;
 
     private final String EMAIL = "obroshi83@gmail.com";
     private final String PASSWORD = "Orenb1983";
@@ -23,14 +27,16 @@ public class DarioAppTest extends BaseTest {
 
         googlePlayAppPage = new GooglePlayMainPage(mobileDriver);
         resultsPage = googlePlayAppPage.searchAnApp("dario");
-        appPage = resultsPage.selectDarioApp();
-        if (appPage.installApp()) {
-            welcomePage = new DarioWelcomePage(mobileDriver);
-            loginPage = welcomePage.swipeTutorial();
-        }
-        loginPage.login(EMAIL,PASSWORD);
-
-
+//        appPage = resultsPage.selectDarioApp();
+//        if (appPage.installApp()) {
+//            welcomePage = new DarioWelcomePage(mobileDriver);
+//            loginPage = welcomePage.swipeTutorial();
+//        }
+//        facebookPage = loginPage.loginWithFb();
+//        appMainPage = facebookPage.loginWithFacebook("oren.broshi@gmail.com", "984350Ob1");
+//        dataEntryPage = appMainPage.takeMeasurement(MeasurementType.BLOOD_SUGAR);
+//        appMainPage = dataEntryPage.addNewValue();
+//        Assert.assertTrue(appMainPage.getAvgBloodGlucoseValue() > 0);
     }
 
 
