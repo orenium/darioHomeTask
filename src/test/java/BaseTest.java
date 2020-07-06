@@ -30,12 +30,19 @@ public class BaseTest implements Action {
     private static final String APP_PATH = "/Users/orenbroshi/IdeaProjects/darioHomeTask/src/main/resources/base.apk";
     private static final String GOOGLE_PLAY_APP_PACKAGE = "com.android.vending";
     private static final String GOOGLE_PLAY_APP_ACTIVITY = "com.google.android.finsky.activities.MainActivity";
-    boolean isRealDevice = Boolean.parseBoolean(System.getProperty("isRealDevice"));
+    private static final String AVD = "Pixel_2";
+    private boolean isRealDevice = Boolean.parseBoolean(System.getProperty("isRealDevice"));
+    private boolean unInstallApp = Boolean.parseBoolean(System.getProperty("unInstallApp"));
 
     @BeforeClass
     public void setup() {
 //        driver = getNewChromeWebDriver();
-        clearDarioAppDate();
+        getRandomSwipeDirection();
+        if (unInstallApp){
+            uninstallDarioApp();
+        } else {
+            clearDarioAppDate();
+        }
         mobileDriver = getNewAndroidDriver();
 
     }
@@ -53,18 +60,13 @@ public class BaseTest implements Action {
                 }
             } else {   // Emulator
                 capabilities.setCapability(MobileCapabilityType.UDID, "emulator-5554");
-                capabilities.setCapability(AndroidMobileCapabilityType.AVD, "Pixel_2");
+                capabilities.setCapability(AndroidMobileCapabilityType.AVD, AVD);
+                report.addRunProperty("Device name", AVD);
             }
             capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, Platform.ANDROID);
             capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, AutomationName.ANDROID_UIAUTOMATOR2);
             capabilities.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, GOOGLE_PLAY_APP_PACKAGE);
-//            capabilities.setCapability(MobileCapabilityType.APP, APP_PATH);
             capabilities.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, GOOGLE_PLAY_APP_ACTIVITY);
-//            capabilities.setCapability(AndroidMobileCapabilityType.APPLICATION_NAME, " ");
-//            capabilities.setCapability(AndroidMobileCapabilityType.BROWSER_NAME, "Chrome");
-//            capabilities.setCapability("chromedriverExecutable", "/Users/orenbroshi/IdeaProjects/darioHomeTask/src/main/resources/chromedriver");
-            capabilities.setCapability(AUTO_GRANT_PERMISSIONS, "true");
-            capabilities.setCapability(MobileCapabilityType.NO_RESET, false);
 
             mobileDriver = new AndroidDriver(new URL(APPIUM_LOCALHOST_URL), capabilities);
             mobileDriver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
@@ -98,6 +100,16 @@ public class BaseTest implements Action {
             Runtime runtime = Runtime.getRuntime();
             runtime.exec("adb shell pm clear com.labstyle.darioandroid");
             printToLog("Dario app data was cleared...");
+        } catch (IOException e) {
+            printToLog("BaseTesl.clearDarioAppDate: "+ e.getMessage());
+        }
+    }
+
+    private void uninstallDarioApp() {
+        try {
+            Runtime runtime = Runtime.getRuntime();
+            runtime.exec("adb uninstall com.labstyle.darioandroid");
+            printToLog("Dario app was removed from device");
         } catch (IOException e) {
             printToLog("BaseTesl.clearDarioAppDate: "+ e.getMessage());
         }

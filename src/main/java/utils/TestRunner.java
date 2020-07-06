@@ -11,16 +11,19 @@ import io.appium.java_client.android.nativekey.KeyEventMetaModifier;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class TestRunner {
 
@@ -58,7 +61,7 @@ public class TestRunner {
         report.log(content);
     }
 
-    public static java.util.List<String> getAllConnectedDevices() {
+    public static List<String> getAllConnectedDevices() {
         String line;
         List<String> connectedDevices = new ArrayList<String>();
         try {
@@ -72,13 +75,13 @@ public class TestRunner {
             line = (reader.readLine());
             while ((line = reader.readLine()) != null) {
                 if (line.contains("device")) {
-                    connectedDevices.add(line.split(" ")[0]);
+                    connectedDevices.add((line.split(" ")[0]).split("\t")[0]);
                 }
             }
             is.close();
 
         } catch (Exception ex) {
-            printToLog("BaseTest.getAllConnectedDevices: " + ex.getMessage());
+            printToLog("TestRunner.getAllConnectedDevices: " + ex.getMessage());
         }
         return connectedDevices;
     }
@@ -116,6 +119,48 @@ public class TestRunner {
             ((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.DIGIT_8));
             ((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.DIGIT_3));
         }
+
+    }
+
+    public static Point getElementLocation(WebElement element) {
+        Point location = null;
+        if (element != null) {
+            location = element.getLocation();
+        }
+        return location;
+    }
+
+    public static Dimension getElementDimensions(WebElement element) {
+        Dimension elementSize = null;
+        if (element != null) {
+            elementSize = element.getSize();
+        }
+        return elementSize;
+    }
+
+    public static Point getElementCenterPoint(WebElement element) {
+        Point centerPoint = null;
+        try {
+            if (element != null) {
+                Point elementLocation = element.getLocation();
+                Dimension elementSize = element.getSize();
+                centerPoint = new Point(elementLocation.getX() + elementSize.width / 2, elementLocation.getY() + elementSize.height / 2);
+            }
+        } catch (Exception ex) {
+            printToLog("TestRunner.getElementCenterPoint: " + ex.getMessage());
+        }
+        return centerPoint;
+    }
+
+    public static SwipeDirection getRandomSwipeDirection() {
+
+        SwipeDirection[] directions = SwipeDirection.values();
+        Random random = new Random();
+        SwipeDirection direction;
+        do {
+            direction = directions[random.nextInt(directions.length)];
+        } while (direction == SwipeDirection.UP || direction == SwipeDirection.DOWN);
+        return direction;
 
     }
 

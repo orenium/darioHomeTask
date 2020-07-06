@@ -40,6 +40,7 @@ public class GooglePlayAppPage extends BasePage {
                 } else if (button.getText().equalsIgnoreCase("open")) {
                     button.click();
                     printToLog("Opening Dario app..");
+                    Thread.sleep(4000);
                     isInstalled = true;
                     break;
                 }

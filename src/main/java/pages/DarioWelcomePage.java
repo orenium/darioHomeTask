@@ -1,11 +1,8 @@
 package pages;
 
-import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileDriver;
-import io.appium.java_client.MobileElement;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import utils.SwipeDirection;
 
 import static utils.TestRunner.printToLog;
@@ -22,14 +19,13 @@ public class DarioWelcomePage extends BasePage {
 
     public DarioLoginPage swipeTutorial() {
         try {
-//            for (int i = 0; i < 9; i++) {
-//                swipe(SwipeDirection.LEFT);
-//            }
-            do {
-                Thread.sleep(10000);
+            Thread.sleep(10000);
+            swipe(SwipeDirection.RIGHT);
+            if (!loginBtn.isDisplayed()) {
+                Thread.sleep(5000);
                 swipe(SwipeDirection.RIGHT);
-            } while (!loginBtn.isDisplayed());
-            wait.until(ExpectedConditions.visibilityOf(loginBtn)).click();
+            }
+            loginBtn.click();
             printToLog("Tutorial finished");
         } catch (Exception ex) {
             printToLog("DarioWelcomePage.swipeTutorial: " + ex.getMessage());

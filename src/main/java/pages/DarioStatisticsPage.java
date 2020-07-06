@@ -11,21 +11,30 @@ import static utils.TestRunner.printToLog;
 
 public class DarioStatisticsPage extends BasePage {
 
-    @FindBy(id = "com.labstyle.darioandroid:id/stat_squareview_subtext")
-    public WebElement hyposSquareViewBtn;
+    @FindBy(id = "com.labstyle.darioandroid:id/stat_measurement_hypos")
+    public WebElement hyposSquareBtn;
+
+    @FindBy(id = "com.labstyle.darioandroid:id/statistics_details_close_button")
+    public WebElement closeWindowBtn;
 
     @FindAll({
             @FindBy(id = "com.labstyle.darioandroid:id/statistics_detail_row_value")})
     public List<WebElement> insertedValues;
+
+    @FindAll({
+            @FindBy(className = "android.widget.LinearLayout")})
+    public List<WebElement> linearLayoutViews;
+
+
+
 
     public DarioStatisticsPage(MobileDriver mobileDriver) {
         super(mobileDriver);
     }
 
     public int getLastInsertedValue() {
-
         try {
-            hyposSquareViewBtn.click();
+            hyposSquareBtn.click();
             if (insertedValues.size() > 0) {
                 printToLog("Last inserted value: " + insertedValues.get(0).getText());
                 return Integer.parseInt(insertedValues.get(0).getText());
@@ -37,4 +46,14 @@ public class DarioStatisticsPage extends BasePage {
         }
         return -1;
     }
+
+    public void closeStatisticsWindow(){
+        if (closeWindowBtn.isDisplayed()){
+            closeWindowBtn.click();
+            printToLog("Statistics window was closed");
+        }
+
+    }
+
+
 }
