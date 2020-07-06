@@ -7,7 +7,10 @@ public class DarioAppTest extends BaseTest {
 
 
     private DarioAppMainPage appMainPage;
-
+    private final String EMAIL = System.getProperty("loginEmail");
+    private final String PASS = System.getProperty("loginPassword");
+    private final String FB_EMAIL = System.getProperty("facebookEmail");
+    private final String FB_PASS = System.getProperty("facebookPassword");
 
     private int lastValueEntered = -1;
     private int lastValueRecorded = -1;
