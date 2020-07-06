@@ -21,7 +21,7 @@ public class GooglePlayMainPage extends BasePage {
 
     public GooglePlayMainPage(MobileDriver driver) {
         super(driver);
-        printToLog("Opening Google Play store");
+        printToLog("Opening Google PlayStore");
     }
 
     public GooglePlaySearchResultsPage searchAnApp(String appToFind) {

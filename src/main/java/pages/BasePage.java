@@ -5,6 +5,7 @@ import io.appium.java_client.TouchAction;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
@@ -88,7 +89,7 @@ public abstract class BasePage {
             PointOption endPoint = new PointOption();
             WaitOptions waitOptions = new WaitOptions();
             touchAction.press(startPoint.withCoordinates(startX, startY)).waitAction(waitOptions.withDuration(Duration.ofSeconds(2))).moveTo(endPoint.withCoordinates(endX, endY)).release().perform();
-            printToLog("BasePage.swipeElement(" + swipeDirection.toString() + "): Swiped " + swipeDirection.toString() + " successfully");
+            printToLog("Element was swiped " + swipeDirection.toString() + " successfully");
         } catch (Exception ex) {
             printToLog("BasePage.swipeElement(" + swipeDirection.toString() + "): Error details: " + ex.getMessage());
         }
@@ -98,7 +99,7 @@ public abstract class BasePage {
         try {
             Thread.sleep(5000);
             for (int i = 0; i < numOfExpectedAlerts; i++) {
-                wait.until(ExpectedConditions.alertIsPresent()).accept();
+                wait.until(ExpectedConditions.elementToBeClickable(By.id("com.android.packageinstaller:id/permission_allow_button"))).click();
                 printToLog("Alert was accepted (" + (i + 1) + "/" + numOfExpectedAlerts + ")");
             }
         } catch (Exception ex) {
@@ -150,7 +151,7 @@ public abstract class BasePage {
             PointOption endPoint = new PointOption();
             WaitOptions waitOptions = new WaitOptions();
             touchAction.press(startPoint.withCoordinates(startX, startY)).waitAction(waitOptions.withDuration(Duration.ofSeconds(2))).moveTo(endPoint.withCoordinates(endX, endY)).release().perform();
-            printToLog("BasePage.swipe(" + swipeDirection.toString() + "): Swiped " + swipeDirection.toString() + " successfully");
+            printToLog("Swiped " + swipeDirection.toString() + " successfully");
         } catch (Exception ex) {
             printToLog("BasePage.swipe(" + swipeDirection.toString() + "): Error details: " + ex.getMessage());
         }

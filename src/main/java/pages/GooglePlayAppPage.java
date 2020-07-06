@@ -30,7 +30,7 @@ public class GooglePlayAppPage extends BasePage {
             for (WebElement button : buttons) {
                 if (button.getText().equalsIgnoreCase("install")) {
                     button.click();
-                    printToLog("Installing dario app...");
+                    printToLog("Installing Dario app...");
                     WebDriverWait wait = new WebDriverWait(mobileDriver, 120);
                     wait.until(ExpectedConditions.elementToBeClickable(openAppBtn)).click();
                     printToLog("Dario app was successfully installed!");

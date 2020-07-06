@@ -1,6 +1,8 @@
 package pages;
 
 import io.appium.java_client.MobileDriver;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -19,11 +21,19 @@ public class DarioAppMainPage extends BasePage {
     @FindBy(id = "com.labstyle.darioandroid:id/fetValue")
     public WebElement avgBloodGlucoseValue;
 
+    @FindBy(id = "com.labstyle.darioandroid:id/header")
+    public WebElement pleaseSyncHeaderMsg;
+
+    @FindBy(id = "com.labstyle.darioandroid:id/button_ok")
+    public WebElement pleaseSyncMsgOkBtn;
+
+
     public DarioAppMainPage(MobileDriver mobileDriver) {
         super(mobileDriver);
     }
 
     public DarioDataEntryPage takeMeasurement(MeasurementType measurementType) {
+//       dismissSyncMsgIfShown();
         wait.until(ExpectedConditions.visibilityOf(plusBtn)).click();
         switch (measurementType) {
             case BLOOD_SUGAR:
@@ -52,6 +62,17 @@ public class DarioAppMainPage extends BasePage {
     public DarioStatisticsPage openStatisticsPage() {
         avgBloodGlucoseValue.click();
         return new DarioStatisticsPage(mobileDriver);
+    }
+
+    public void dismissSyncMsgIfShown(){
+        try{
+            if (pleaseSyncHeaderMsg.isDisplayed()){
+                pleaseSyncMsgOkBtn.click();
+                printToLog("Sync msg was dismissed");
+            }
+        } catch (NoSuchElementException exception){
+            // Do nothing
+        }
     }
 
 

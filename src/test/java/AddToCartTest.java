@@ -5,27 +5,44 @@ import pages.CheckoutAndPayWebPage;
 import pages.DarioShopHomeWebPage;
 import utils.URLs;
 
+import static utils.TestRunner.report;
+
 public class AddToCartTest extends BaseTest {
-    private DarioShopHomeWebPage darioShopHomePage;
-    private CartInfoWebPage cartInfoPage;
-    private CheckoutAndPayWebPage checkoutAndPayPage;
 
     @Test
     public void addItemToCartTest() {
-        openURL(driver, URLs.DARIO_SHOP_URL);
-        darioShopHomePage = new DarioShopHomeWebPage(driver);
+        report.startLevel("Open URL:" + URLs.DARIO_SHOP_URL);
+        openURL(URLs.DARIO_SHOP_URL);
+        DarioShopHomeWebPage darioShopHomePage = new DarioShopHomeWebPage(driver);
+        report.endLevel();
+
+        report.startLevel("Add random product to cart");
         darioShopHomePage.addRandomProductToCart();
+        report.endLevel();
 
-//        Assert.assertTrue(darioShopHomePage.getNumItemsInCart() > 0);
+        report.startLevel("Open Cart page");
+        CartInfoWebPage cartInfoPage = darioShopHomePage.openCartInfoPage();
+        report.endLevel();
 
-        cartInfoPage = darioShopHomePage.openCartInfoPage();
-        cartInfoPage.printCartSummaryText();
+        report.startLevel("Try to place order without filling the required filed");
         cartInfoPage.placeOrder();
+        report.endLevel();
+
+        report.startLevel("Fill the required filed and place order");
         cartInfoPage.insertValidDataAll();
         cartInfoPage.acceptTerms();
-        checkoutAndPayPage = cartInfoPage.placeOrder();
-        checkoutAndPayPage.selectPaypal();
-        Assert.assertTrue(checkoutAndPayPage.submitOrder());
+        CheckoutAndPayWebPage checkoutAndPayPage = cartInfoPage.placeOrder();
+        report.endLevel();
+
+        report.startLevel("Select PayPal as payment method");
+        checkoutAndPayPage.selectPayPalAsPaymentMethod();
+        report.endLevel();
+
+        report.startLevel("Submit order");
+        checkoutAndPayPage.submitOrder();
+        report.endLevel();
+
+        Assert.assertTrue(driver.getCurrentUrl().contains("paypal.com/"));
 
     }
 

@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class LoginWIthFacebookPage extends BasePage{
 
     public DarioAppMainPage loginWithFacebook(String fbEmail, String fbPassword) {
         try {
+//            WebDriverWait wait = new WebDriverWait(mobileDriver, 20);
             printToLog("Logging in with Facebook");
             if (inputFields.size() > 0){
                 inputFields.get(0).sendKeys(fbEmail);

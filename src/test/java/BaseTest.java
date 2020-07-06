@@ -4,21 +4,24 @@ import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.AutomationName;
 import io.appium.java_client.remote.MobileCapabilityType;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Listeners;
-import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.concurrent.TimeUnit;
 
-import static io.appium.java_client.remote.AndroidMobileCapabilityType.AUTO_GRANT_PERMISSIONS;
 import static utils.TestRunner.*;
 
 @Listeners(il.co.topq.difido.ReportManagerHook.class)
@@ -34,23 +37,26 @@ public class BaseTest implements Action {
     private boolean isRealDevice = Boolean.parseBoolean(System.getProperty("isRealDevice"));
     private boolean unInstallApp = Boolean.parseBoolean(System.getProperty("unInstallApp"));
 
-    @BeforeClass
-    public void setup() {
-//        driver = getNewChromeWebDriver();
-        getRandomSwipeDirection();
-        if (unInstallApp){
-            uninstallDarioApp();
+    @BeforeSuite
+    public void setup() throws UnknownHostException {
+        if (System.getProperty("testType").equalsIgnoreCase("web")){
+            driver = getNewChromeWebDriver();
         } else {
-            clearDarioAppDate();
+            mobileDriver = getNewAndroidDriver();
         }
-        mobileDriver = getNewAndroidDriver();
-
+        report.addRunProperty("Operating System", System.getProperty("os.name"));
+        report.addRunProperty("Local machine", InetAddress.getLocalHost().getHostName());
     }
 
     private AndroidDriver getNewAndroidDriver() {
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        printToLog("Setting Android mobile driver...");
+        if (unInstallApp) {
+            uninstallDarioApp();
+        } else {
+            clearDarioAppDate();
+        }
         try {
+            printToLog("Setting Android mobile driver...");
             if (isRealDevice) {
                 // get the 1st connected phone
                 if (getAllConnectedDevices().size() > 0)
@@ -78,8 +84,12 @@ public class BaseTest implements Action {
     }
 
     private WebDriver getNewChromeWebDriver() {
+        printToLog("Setting new ChromeWebDriver...");
         WebDriverManager.chromedriver().setup();
-        return new ChromeDriver();
+        WebDriver WebDriver = new ChromeDriver();
+        Capabilities capabilities = ((RemoteWebDriver) WebDriver).getCapabilities();
+        report.addRunProperty("Browser", capabilities.getBrowserName() + " " + capabilities.getVersion());
+        return WebDriver;
     }
 
 
@@ -91,7 +101,23 @@ public class BaseTest implements Action {
         if (mobileDriver != null) {
             takeScreenShot(mobileDriver);
         }
+    }
+
+    @AfterSuite
+    public void afterSuite() {
         openHtmlReportFile(true, driver);
+        if  (!isRealDevice){
+            quiteMobileEmulator();
+        }
+    }
+
+    private void quiteMobileEmulator() {
+        try {
+            Runtime runtime = Runtime.getRuntime();
+            runtime.exec("adb -s emulator-5554 emu kill");
+        } catch (IOException e) {
+            printToLog("BaseTesl.clearDarioAppDate: " + e.getMessage());
+        }
 
     }
 
@@ -101,7 +127,7 @@ public class BaseTest implements Action {
             runtime.exec("adb shell pm clear com.labstyle.darioandroid");
             printToLog("Dario app data was cleared...");
         } catch (IOException e) {
-            printToLog("BaseTesl.clearDarioAppDate: "+ e.getMessage());
+            printToLog("BaseTesl.clearDarioAppDate: " + e.getMessage());
         }
     }
 
@@ -111,7 +137,7 @@ public class BaseTest implements Action {
             runtime.exec("adb uninstall com.labstyle.darioandroid");
             printToLog("Dario app was removed from device");
         } catch (IOException e) {
-            printToLog("BaseTesl.clearDarioAppDate: "+ e.getMessage());
+            printToLog("BaseTesl.clearDarioAppDate: " + e.getMessage());
         }
     }
 
@@ -120,9 +146,11 @@ public class BaseTest implements Action {
 
     }
 
-    public void openURL(WebDriver driver, String url) {
-        if (driver != null) {
-            driver.get(url);
+    public void openURL(String url) {
+        if (driver == null) {
+            driver = getNewChromeWebDriver();
         }
+        driver.get(url);
+        printToLog("Opening Url: " + url);
     }
 }

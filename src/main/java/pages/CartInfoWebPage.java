@@ -8,9 +8,11 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static utils.TestRunner.printToLog;
+import static utils.TestRunner.takeScreenShot;
 
 public class CartInfoWebPage extends BaseWebPage {
     @FindAll({
@@ -54,18 +56,42 @@ public class CartInfoWebPage extends BaseWebPage {
     @FindBy(css = "span#select2-billing_state-container")
     public WebElement stateOptionSelection;
 
+    @FindAll({
+            @FindBy(css = "div[data-title='Product']")})
+    public List<WebElement> productsInCart;
+
+
+
+
     private WebDriverWait wait;
+    private int productsCounter = 0;
 
     public CartInfoWebPage(WebDriver driver) {
         super(driver);
         wait = new WebDriverWait(driver, 10);
         waitForPageToLoad(new By.ByCssSelector("button#place_order"));
+        printCartSummaryText();
     }
 
     public void printCartSummaryText() {
-        if (summaryText.size() > 0) {
-            printToLog(summaryText.get(2).getText());
+        try {
+            wait.until(ExpectedConditions.visibilityOfAllElements(productsInCart));
+            if (summaryText.size() > 0) {
+                printToLog(" ********************************* ");
+                printToLog(summaryText.get(2).getText() + ":");
+                for (String productName : getProductsNamesInCart()) {
+                    productsCounter++;
+                    printToLog(productName.replaceAll("\r\n", " "));
+                }
+                printToLog(" ********************************* ");
+            }
+        } catch (Exception ex) {
+            printToLog("CartInfoPage.printCartSummaryText: " + ex.getMessage());
         }
+    }
+
+    public int getItemsInCartCounter() {
+        return productsCounter;
     }
 
     public CheckoutAndPayWebPage placeOrder() {
@@ -74,6 +100,7 @@ public class CartInfoWebPage extends BaseWebPage {
             wait.until(ExpectedConditions.visibilityOf(placeOrderBtn)).click();
             if (isVerifiedInputs()) {
                 printToLog("All fields are ok! Submitting order...");
+                takeScreenShot(driver);
                 checkoutAndPayPage = new CheckoutAndPayWebPage(driver);
             } else {
                 printToLog("Unable to complete order, some inputs are invalid!");
@@ -163,8 +190,22 @@ public class CartInfoWebPage extends BaseWebPage {
         } catch (Exception ex) {
             printToLog("CartInfoPage.insertValidDataField: " + ex.getMessage());
         }
+    }
 
-
+    public List<String> getProductsNamesInCart() {
+        List<String> productsNames = new ArrayList<>();
+        try {
+            if (productsInCart.size() > 0) {
+                for (WebElement productName : productsInCart) {
+                    productsNames.add(productName.getText());
+                }
+            } else {
+                printToLog("It seems like cart is empty");
+            }
+        } catch (Exception ex) {
+            printToLog("CartInfoPage.getProductsNamesInCart: " + ex.getMessage());
+        }
+        return productsNames;
     }
 }
 

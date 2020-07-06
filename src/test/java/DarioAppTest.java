@@ -8,17 +8,11 @@ import static utils.TestRunner.report;
 
 public class DarioAppTest extends BaseTest {
 
-
-    private DarioAppMainPage appMainPage;
-    private final String EMAIL = System.getProperty("loginEmail");
-    private final String PASS = System.getProperty("loginPassword");
     private final String FB_EMAIL = System.getProperty("facebookEmail");
     private final String FB_PASS = System.getProperty("facebookPassword");
+    private int expectedValue, actualValue =-1;
 
-    private int lastValueEntered = -1;
-    private int lastValueRecorded = -1;
-
-    @Test(description = "This test starts at the Google play store and download / open the dario app")
+    @Test
     public void darioAppTest() throws InterruptedException {
 
         report.startLevel("Get the app from the Google Play store");
@@ -32,25 +26,28 @@ public class DarioAppTest extends BaseTest {
         DarioWelcomePage welcomePage = new DarioWelcomePage(mobileDriver);
         DarioLoginPage loginPage = welcomePage.swipeTutorial();
         LoginWIthFacebookPage facebookPage = loginPage.loginWithFb();
-        appMainPage = facebookPage.loginWithFacebook(FB_EMAIL, FB_PASS);
+        DarioAppMainPage appMainPage = facebookPage.loginWithFacebook(FB_EMAIL, FB_PASS);
         Thread.sleep(3000);
         report.endLevel();
 
-        report.startLevel("Take new BLOOD SUGAR measurement");
+        report.startLevel("Accept all permissions");
         appMainPage.acceptAlertsIfShown(3);
+        report.endLevel();
+
+        report.startLevel("Take new BLOOD SUGAR measurement");
         DarioDataEntryPage dataEntryPage = appMainPage.takeMeasurement(MeasurementType.BLOOD_SUGAR);
         dataEntryPage.swipeToSetValue();
-        lastValueEntered = dataEntryPage.getValue();
+        expectedValue = dataEntryPage.getValue();
         appMainPage = dataEntryPage.ClickDoneButton();
         report.endLevel();
 
         report.startLevel("Verify value was save at the log");
         DarioStatisticsPage statisticsPage = appMainPage.openStatisticsPage();
-        lastValueRecorded = statisticsPage.getLastInsertedValue();
+        actualValue = statisticsPage.getLastInsertedValue();
         report.endLevel();
-        printToLog("lastValueEntered: " + lastValueEntered);
-        printToLog("lastValueRecorded: " + lastValueRecorded);
-        Assert.assertTrue(((lastValueEntered != (-1)) && (lastValueEntered == lastValueRecorded)),
+        printToLog("Expected Value: " + expectedValue);
+        printToLog("Actual Value: " + actualValue);
+        Assert.assertTrue(((expectedValue != (-1)) && (expectedValue == actualValue)),
                 "Test failed - Values are not equal");
     }
 
