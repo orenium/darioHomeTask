@@ -30,7 +30,6 @@ public class BaseTest implements Action {
     public WebDriver driver = null;
     public MobileDriver mobileDriver;
     private static final String APPIUM_LOCALHOST_URL = "http://localhost:4723/wd/hub";
-    private static final String APP_PATH = "/Users/orenbroshi/IdeaProjects/darioHomeTask/src/main/resources/base.apk";
     private static final String GOOGLE_PLAY_APP_PACKAGE = "com.android.vending";
     private static final String GOOGLE_PLAY_APP_ACTIVITY = "com.google.android.finsky.activities.MainActivity";
     private static final String AVD = "Pixel_2";
