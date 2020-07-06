@@ -25,6 +25,8 @@ public class DarioDataEntryPage extends BasePage {
     @FindBy(id = "com.labstyle.darioandroid:id/rule")
     public WebElement valueSlider;
 
+    private int ShownValue = 0;
+
     public DarioDataEntryPage(MobileDriver mobileDriver) {
         super(mobileDriver);
     }
@@ -60,16 +62,33 @@ public class DarioDataEntryPage extends BasePage {
         }
     }
 
-    public DarioAppMainPage addNewValue(){
+    public void setValue() {
+        if (valueElement.isDisplayed()) {
+            ShownValue = Integer.parseInt(valueElement.getText());
+        }
+    }
 
-        try{
-            wait.until(ExpectedConditions.elementToBeClickable(addBtn)).click();
-            doneBtn.click();
-            printToLog("Value: " + valueElement.getText() + " was recorded");
-        } catch (Exception ex){
-            printToLog("DarioDataEntryPage.addNewValue: "+ ex.getMessage());
+    public DarioAppMainPage ClickDoneButton() {
+        try {
+            if (doneBtn.isDisplayed()){
+                doneBtn.click();
+            }
+//            ShownValue = Integer.parseInt(valueElement.getText());
+//            printToLog("Value: " + ShownValue + " was recorded");
+        } catch (Exception ex) {
+            printToLog("DarioDataEntryPage.addNewValue: " + ex.getMessage());
         }
         return new DarioAppMainPage(mobileDriver);
+    }
+
+    public int getValue() {
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(addBtn)).click();
+            wait.until(ExpectedConditions.visibilityOf(valueElement));
+        } catch (Exception ex) {
+            printToLog("DarioDataEntryPage.getValue: " + ex.getMessage());
+        }
+        return Integer.parseInt(valueElement.getText());
     }
 
 }

@@ -12,6 +12,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,14 +28,16 @@ public class BaseTest implements Action {
     public MobileDriver mobileDriver;
     private static final String APPIUM_LOCALHOST_URL = "http://localhost:4723/wd/hub";
     private static final String APP_PATH = "/Users/orenbroshi/IdeaProjects/darioHomeTask/src/main/resources/base.apk";
-    private static final String APP_PACKAGE = "com.android.vending";
-    private static final String APP_ACTIVITY = "com.google.android.finsky.activities.MainActivity";
+    private static final String GOOGLE_PLAY_APP_PACKAGE = "com.android.vending";
+    private static final String GOOGLE_PLAY_APP_ACTIVITY = "com.google.android.finsky.activities.MainActivity";
     boolean isRealDevice = Boolean.parseBoolean(System.getProperty("isRealDevice"));
 
     @BeforeClass
     public void setup() {
 //        driver = getNewChromeWebDriver();
+        clearDarioAppDate();
         mobileDriver = getNewAndroidDriver();
+
     }
 
     private AndroidDriver getNewAndroidDriver() {
@@ -50,13 +53,13 @@ public class BaseTest implements Action {
                 }
             } else {   // Emulator
                 capabilities.setCapability(MobileCapabilityType.UDID, "emulator-5554");
-                capabilities.setCapability(AndroidMobileCapabilityType.AVD, "Nexus_5X");
+                capabilities.setCapability(AndroidMobileCapabilityType.AVD, "Pixel_2");
             }
             capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, Platform.ANDROID);
             capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, AutomationName.ANDROID_UIAUTOMATOR2);
-            capabilities.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, APP_PACKAGE);
+            capabilities.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, GOOGLE_PLAY_APP_PACKAGE);
 //            capabilities.setCapability(MobileCapabilityType.APP, APP_PATH);
-            capabilities.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, APP_ACTIVITY);
+            capabilities.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, GOOGLE_PLAY_APP_ACTIVITY);
 //            capabilities.setCapability(AndroidMobileCapabilityType.APPLICATION_NAME, " ");
 //            capabilities.setCapability(AndroidMobileCapabilityType.BROWSER_NAME, "Chrome");
 //            capabilities.setCapability("chromedriverExecutable", "/Users/orenbroshi/IdeaProjects/darioHomeTask/src/main/resources/chromedriver");
@@ -84,7 +87,6 @@ public class BaseTest implements Action {
             takeScreenShot(driver);
         }
         if (mobileDriver != null) {
-            clearDarioAppDate();
             takeScreenShot(mobileDriver);
         }
         openHtmlReportFile(true, driver);
@@ -95,6 +97,7 @@ public class BaseTest implements Action {
         try {
             Runtime runtime = Runtime.getRuntime();
             runtime.exec("adb shell pm clear com.labstyle.darioandroid");
+            printToLog("Dario app data was cleared...");
         } catch (IOException e) {
             printToLog("BaseTesl.clearDarioAppDate: "+ e.getMessage());
         }

@@ -28,25 +28,30 @@ public class DarioAppMainPage extends BasePage {
         switch (measurementType) {
             case BLOOD_SUGAR:
                 wait.until(ExpectedConditions.visibilityOf(plusBloodSugarOption)).click();
+                printToLog("Taking " + measurementType.toString() + " measurement");
                 break;
             case BLOOD_PRESSURE:
                 break;
             case WEIGHT:
                 break;
             default:
-
-                printToLog("Taking " + measurementType.toString() + "measurement");
         }
         return new DarioDataEntryPage(mobileDriver);
     }
 
     public int getAvgBloodGlucoseValue() {
         if (avgBloodGlucoseValue.isDisplayed()) {
+            printToLog("Blood Glucose Value: " + avgBloodGlucoseValue.getText());
             return Integer.parseInt(avgBloodGlucoseValue.getText());
         } else {
             printToLog("Unable fo get avg Blood Glucose Value");
         }
         return -1;
+    }
+
+    public DarioStatisticsPage openStatisticsPage() {
+        avgBloodGlucoseValue.click();
+        return new DarioStatisticsPage(mobileDriver);
     }
 
 

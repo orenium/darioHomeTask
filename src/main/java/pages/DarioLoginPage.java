@@ -33,7 +33,7 @@ public class DarioLoginPage extends BasePage {
             inputFields.get(1).clear();
             inputFields.get(1).click();
 //            inputFields.get(1).sendKeys(pass);
-            sendKeyByVirtualKeyboard(mobileDriver);
+//            sendKeyByVirtualKeyboard(mobileDriver);
             Thread.sleep(3000);
 //            sendKeysAsChars(inputFields.get(1),pass);
 

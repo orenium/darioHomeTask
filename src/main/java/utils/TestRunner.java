@@ -18,10 +18,7 @@ import org.openqa.selenium.WebElement;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,6 +116,7 @@ public class TestRunner {
             ((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.DIGIT_8));
             ((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.DIGIT_3));
         }
+
     }
 
 

@@ -5,7 +5,9 @@ import io.appium.java_client.TouchAction;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.SwipeDirection;
 
@@ -90,6 +92,19 @@ public abstract class BasePage {
             printToLog("BasePage.swipe(" + swipeDirection.toString() + "): Swiped " + swipeDirection.toString() + " successfully");
         } catch (Exception ex) {
             printToLog("BasePage.swipe(" + swipeDirection.toString() + "): Error details: " + ex.getMessage());
+        }
+    }
+
+    public void acceptAlertsIfShown(int numOfExpectedAlerts) {
+        try {
+            for (int i = 0; i < numOfExpectedAlerts; i++) {
+                wait.until(ExpectedConditions.alertIsPresent());
+                Alert alert = mobileDriver.switchTo().alert();
+                alert.accept();
+                printToLog("Alert was accepted (" + (i + 1) + "/" + numOfExpectedAlerts + ")");
+            }
+        } catch (Exception ex) {
+            printToLog("BasePage.acceptAlertsIfShown: " + ex.getMessage());
         }
     }
 

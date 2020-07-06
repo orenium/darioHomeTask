@@ -15,8 +15,9 @@ public class DarioWelcomePage extends BasePage {
     @FindBy(id = "com.labstyle.darioandroid:id/welcome_get_started_login_button")
     public WebElement loginBtn;
 
-    public DarioWelcomePage(MobileDriver mobileDriver) {
+    public DarioWelcomePage(MobileDriver mobileDriver) throws InterruptedException {
         super(mobileDriver);
+        Thread.sleep(3000);
     }
 
     public DarioLoginPage swipeTutorial() {
@@ -25,7 +26,7 @@ public class DarioWelcomePage extends BasePage {
 //                swipe(SwipeDirection.LEFT);
 //            }
             do {
-                Thread.sleep(3000);
+                Thread.sleep(10000);
                 swipe(SwipeDirection.RIGHT);
             } while (!loginBtn.isDisplayed());
             wait.until(ExpectedConditions.visibilityOf(loginBtn)).click();

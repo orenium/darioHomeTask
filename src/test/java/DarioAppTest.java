@@ -5,39 +5,51 @@ import utils.MeasurementType;
 
 public class DarioAppTest extends BaseTest {
 
-    GooglePlayMainPage googlePlayAppPage;
-    GooglePlaySearchResultsPage resultsPage;
-    GooglePlayAppPage appPage;
-    DarioWelcomePage welcomePage;
-    DarioLoginPage loginPage;
-    LoginWIthFacebookPage facebookPage;
-    DarioAppMainPage appMainPage;
-    DarioDataEntryPage dataEntryPage;
 
-    private final String EMAIL = "obroshi83@gmail.com";
-    private final String PASSWORD = "Orenb1983";
+    private DarioAppMainPage appMainPage;
 
 
-    @Test
+    private int lastValueEntered = -1;
+    private int lastValueRecorded = -1;
+
+    @Test(description = "This test starts at the Google play store and download / open the dario app")
     public void darioAppTest() throws InterruptedException {
 //        googleHomePage = new GoogleHomePage(mobileDriver);
 //        resultsPage = googleHomePage.runGoogleSearch("dario app");
 //        googlePlayAppPage = resultsPage.openAppPageInGooGePlay();
 //        Assert.assertTrue(googlePlayAppPage.installApp());
 
-        googlePlayAppPage = new GooglePlayMainPage(mobileDriver);
-        resultsPage = googlePlayAppPage.searchAnApp("dario");
-//        appPage = resultsPage.selectDarioApp();
-//        if (appPage.installApp()) {
-//            welcomePage = new DarioWelcomePage(mobileDriver);
-//            loginPage = welcomePage.swipeTutorial();
-//        }
-//        facebookPage = loginPage.loginWithFb();
-//        appMainPage = facebookPage.loginWithFacebook("oren.broshi@gmail.com", "984350Ob1");
-//        dataEntryPage = appMainPage.takeMeasurement(MeasurementType.BLOOD_SUGAR);
-//        appMainPage = dataEntryPage.addNewValue();
-//        Assert.assertTrue(appMainPage.getAvgBloodGlucoseValue() > 0);
+        GooglePlayMainPage googlePlayAppPage = new GooglePlayMainPage(mobileDriver);
+        GooglePlaySearchResultsPage resultsPage = googlePlayAppPage.searchAnApp("dario");
+        GooglePlayAppPage appPage = resultsPage.selectDarioApp();
+        if (appPage.installOpenApp()) {
+            DarioWelcomePage welcomePage = new DarioWelcomePage(mobileDriver);
+            DarioLoginPage loginPage = welcomePage.swipeTutorial();
+
+            LoginWIthFacebookPage facebookPage = loginPage.loginWithFb();
+            appMainPage = facebookPage.loginWithFacebook(FB_EMAIL, FB_PASS);
+            Thread.sleep(3000);
+            appMainPage.acceptAlertsIfShown(3);
+            DarioDataEntryPage dataEntryPage = appMainPage.takeMeasurement(MeasurementType.BLOOD_SUGAR);
+            lastValueEntered = dataEntryPage.getValue();
+            appMainPage = dataEntryPage.ClickDoneButton();
+
+//            dataEntryPage = appMainPage.takeMeasurement(MeasurementType.BLOOD_SUGAR);
+//            appMainPage = dataEntryPage.addNewValue();
+        }
+        DarioStatisticsPage statisticsPage = appMainPage.openStatisticsPage();
+        lastValueRecorded = statisticsPage.getLastInsertedValue();
+        System.out.println("lastValueEntered: "+ lastValueEntered);
+        System.out.println("lastValueRecorded: "+ lastValueRecorded);
+        System.out.println(lastValueEntered != (-1));
+        System.out.println(lastValueEntered == lastValueRecorded);
+        Assert.assertTrue((lastValueEntered != (-1)) && (lastValueEntered == lastValueRecorded));
     }
+
+//    @Test (description = "This test take measurement when app is already installed")
+//    public void addMeasurementTest(){
+//
+//    }
 
 
 }

@@ -22,7 +22,7 @@ public class GooglePlayAppPage extends BasePage {
     }
 
 
-    public boolean installApp() {
+    public boolean installOpenApp() {
         boolean isInstalled = false;
         List<WebElement> buttons = null;
         try {
