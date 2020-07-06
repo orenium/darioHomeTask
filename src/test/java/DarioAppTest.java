@@ -19,14 +19,18 @@ public class DarioAppTest extends BaseTest {
         GooglePlayMainPage googlePlayAppPage = new GooglePlayMainPage(mobileDriver);
         GooglePlaySearchResultsPage resultsPage = googlePlayAppPage.searchAnApp("dario");
         GooglePlayAppPage appPage = resultsPage.selectDarioApp();
-        appPage.installOpenApp();
+        boolean isInstalled = appPage.installOpenApp();
+        Assert.assertTrue(isInstalled);
         report.endLevel();
 
         report.startLevel("Skip tutorial and login");
         DarioWelcomePage welcomePage = new DarioWelcomePage(mobileDriver);
         DarioLoginPage loginPage = welcomePage.swipeTutorial();
         LoginWIthFacebookPage facebookPage = loginPage.loginWithFb();
-        DarioAppMainPage appMainPage = facebookPage.loginWithFacebook(FB_EMAIL, FB_PASS);
+        boolean isLoggedIn = facebookPage.loginWithFacebook(FB_EMAIL, FB_PASS);
+        Assert.assertTrue(isLoggedIn);
+
+        DarioAppMainPage appMainPage =new DarioAppMainPage(mobileDriver);
         Thread.sleep(3000);
         report.endLevel();
 

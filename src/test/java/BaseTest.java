@@ -37,11 +37,23 @@ public class BaseTest implements Action {
     private boolean unInstallApp = Boolean.parseBoolean(System.getProperty("unInstallApp"));
 
     @BeforeSuite
-    public void setup() throws UnknownHostException {
+    public void setup() {
         if (System.getProperty("testType").equalsIgnoreCase("web")){
             driver = getNewChromeWebDriver();
         } else {
+            if (unInstallApp) {
+                uninstallDarioApp();
+            } else {
+                clearDarioAppDate();
+            }
             mobileDriver = getNewAndroidDriver();
+        }
+//        addRunProperties();
+    }
+
+    private void addRunProperties() throws UnknownHostException {
+        if (!System.getProperty("testType").equalsIgnoreCase("web")){
+            report.addRunProperty("Device name", AVD);
         }
         report.addRunProperty("Operating System", System.getProperty("os.name"));
         report.addRunProperty("Local machine", InetAddress.getLocalHost().getHostName());
@@ -49,11 +61,6 @@ public class BaseTest implements Action {
 
     private AndroidDriver getNewAndroidDriver() {
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        if (unInstallApp) {
-            uninstallDarioApp();
-        } else {
-            clearDarioAppDate();
-        }
         try {
             printToLog("Setting Android mobile driver...");
             if (isRealDevice) {
@@ -66,7 +73,6 @@ public class BaseTest implements Action {
             } else {   // Emulator
                 capabilities.setCapability(MobileCapabilityType.UDID, "emulator-5554");
                 capabilities.setCapability(AndroidMobileCapabilityType.AVD, AVD);
-                report.addRunProperty("Device name", AVD);
             }
             capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, Platform.ANDROID);
             capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, AutomationName.ANDROID_UIAUTOMATOR2);
@@ -86,8 +92,8 @@ public class BaseTest implements Action {
         printToLog("Setting new ChromeWebDriver...");
         WebDriverManager.chromedriver().setup();
         WebDriver WebDriver = new ChromeDriver();
-        Capabilities capabilities = ((RemoteWebDriver) WebDriver).getCapabilities();
-        report.addRunProperty("Browser", capabilities.getBrowserName() + " " + capabilities.getVersion());
+//        Capabilities capabilities = ((RemoteWebDriver) WebDriver).getCapabilities();
+//        report.addRunProperty("Browser", capabilities.getBrowserName() + " " + capabilities.getVersion());
         return WebDriver;
     }
 
@@ -106,7 +112,7 @@ public class BaseTest implements Action {
     public void afterSuite() {
         openHtmlReportFile(true, driver);
         if  (!isRealDevice){
-            quiteMobileEmulator();
+//            quiteMobileEmulator();
         }
     }
 

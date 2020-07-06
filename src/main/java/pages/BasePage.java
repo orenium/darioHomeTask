@@ -88,7 +88,8 @@ public abstract class BasePage {
             PointOption startPoint = new PointOption();
             PointOption endPoint = new PointOption();
             WaitOptions waitOptions = new WaitOptions();
-            touchAction.press(startPoint.withCoordinates(startX, startY)).waitAction(waitOptions.withDuration(Duration.ofSeconds(2))).moveTo(endPoint.withCoordinates(endX, endY)).release().perform();
+//            touchAction.press(startPoint.withCoordinates(startX, startY)).waitAction(waitOptions.withDuration(Duration.ofSeconds(2))).moveTo(endPoint.withCoordinates(endX, endY)).release().perform();
+            touchAction.press(startPoint.withCoordinates(startX, startY)).waitAction(waitOptions.withDuration(Duration.ofMillis(500))).moveTo(endPoint.withCoordinates(endX, endY)).release().perform();
             printToLog("Element was swiped " + swipeDirection.toString() + " successfully");
         } catch (Exception ex) {
             printToLog("BasePage.swipeElement(" + swipeDirection.toString() + "): Error details: " + ex.getMessage());
@@ -150,7 +151,7 @@ public abstract class BasePage {
             PointOption startPoint = new PointOption();
             PointOption endPoint = new PointOption();
             WaitOptions waitOptions = new WaitOptions();
-            touchAction.press(startPoint.withCoordinates(startX, startY)).waitAction(waitOptions.withDuration(Duration.ofSeconds(2))).moveTo(endPoint.withCoordinates(endX, endY)).release().perform();
+            touchAction.press(startPoint.withCoordinates(startX, startY)).waitAction(waitOptions.withDuration(Duration.ofMillis(500))).moveTo(endPoint.withCoordinates(endX, endY)).release().perform();
             printToLog("Swiped " + swipeDirection.toString() + " successfully");
         } catch (Exception ex) {
             printToLog("BasePage.swipe(" + swipeDirection.toString() + "): Error details: " + ex.getMessage());
