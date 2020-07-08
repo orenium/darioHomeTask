@@ -4,13 +4,11 @@ import io.appium.java_client.remote.AndroidMobileCapabilityType;
 import io.appium.java_client.remote.AutomationName;
 import io.appium.java_client.remote.MobileCapabilityType;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
@@ -33,12 +31,14 @@ public class BaseTest implements Action {
     private static final String GOOGLE_PLAY_APP_PACKAGE = "com.android.vending";
     private static final String GOOGLE_PLAY_APP_ACTIVITY = "com.google.android.finsky.activities.MainActivity";
     private static final String AVD = "Pixel_2";
+    private static final String ANDROID_VERSION = "9";
+    private static final String EMULATOR_UDID = "emulator-5554";
     private boolean isRealDevice = Boolean.parseBoolean(System.getProperty("isRealDevice"));
     private boolean unInstallApp = Boolean.parseBoolean(System.getProperty("unInstallApp"));
 
     @BeforeSuite
     public void setup() {
-        if (System.getProperty("testType").equalsIgnoreCase("web")){
+        if (System.getProperty("testType").equalsIgnoreCase("web")) {
             driver = getNewChromeWebDriver();
         } else {
             if (unInstallApp) {
@@ -52,7 +52,7 @@ public class BaseTest implements Action {
     }
 
     private void addRunProperties() throws UnknownHostException {
-        if (!System.getProperty("testType").equalsIgnoreCase("web")){
+        if (!System.getProperty("testType").equalsIgnoreCase("web")) {
             report.addRunProperty("Device name", AVD);
         }
         report.addRunProperty("Operating System", System.getProperty("os.name"));
@@ -63,22 +63,24 @@ public class BaseTest implements Action {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         try {
             printToLog("Setting Android mobile driver...");
-            if (isRealDevice) {
-                // get the 1st connected phone
-                if (getAllConnectedDevices().size() > 0)
-                    capabilities.setCapability(MobileCapabilityType.UDID, getAllConnectedDevices().get(0));
-                else {
-                    printToLog("-- ANDROID DEVICE IS NOT CONNECTED  --");
-                }
-            } else {   // Emulator
-                capabilities.setCapability(MobileCapabilityType.UDID, "emulator-5554");
-                capabilities.setCapability(AndroidMobileCapabilityType.AVD, AVD);
-            }
             capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, Platform.ANDROID);
             capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, AutomationName.ANDROID_UIAUTOMATOR2);
             capabilities.setCapability(AndroidMobileCapabilityType.APP_PACKAGE, GOOGLE_PLAY_APP_PACKAGE);
             capabilities.setCapability(AndroidMobileCapabilityType.APP_ACTIVITY, GOOGLE_PLAY_APP_ACTIVITY);
-
+            if (isRealDevice) {
+                // get the 1st connected phone
+                if (getAllConnectedDevicesUdid().size() > 0) {
+                    printToLog("Connected Device: " + getConnectedDeviceName() + " | Android " + getConnectedDeviceOsVersion());
+                    capabilities.setCapability(MobileCapabilityType.UDID, getAllConnectedDevicesUdid().get(0));
+                } else {
+                    printToLog("-- ANDROID DEVICE IS NOT CONNECTED  --");
+                }
+            } else {   // Emulator
+                capabilities.setCapability(MobileCapabilityType.UDID, EMULATOR_UDID);
+                capabilities.setCapability(AndroidMobileCapabilityType.AVD, AVD);
+                capabilities.setCapability(AndroidMobileCapabilityType.VERSION, ANDROID_VERSION);
+                printToLog("Device: " + AVD + " | Android " + ANDROID_VERSION);
+            }
             mobileDriver = new AndroidDriver(new URL(APPIUM_LOCALHOST_URL), capabilities);
             mobileDriver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
@@ -111,7 +113,7 @@ public class BaseTest implements Action {
     @AfterSuite
     public void afterSuite() {
         openHtmlReportFile(true, driver);
-        if  (!isRealDevice){
+        if (!isRealDevice) {
 //            quiteMobileEmulator();
         }
     }

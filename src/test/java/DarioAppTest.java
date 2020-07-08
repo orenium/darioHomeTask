@@ -48,9 +48,9 @@ public class DarioAppTest extends BaseTest {
         report.startLevel("Verify value was save at the log");
         DarioStatisticsPage statisticsPage = appMainPage.openStatisticsPage();
         actualValue = statisticsPage.getLastInsertedValue();
-        report.endLevel();
         printToLog("Expected Value: " + expectedValue);
         printToLog("Actual Value: " + actualValue);
+        report.endLevel();
         Assert.assertTrue(((expectedValue != (-1)) && (expectedValue == actualValue)),
                 "Test failed - Values are not equal");
     }

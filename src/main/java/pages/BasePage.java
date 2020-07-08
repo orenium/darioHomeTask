@@ -1,7 +1,9 @@
 package pages;
 
+import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileDriver;
 import io.appium.java_client.TouchAction;
+import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
@@ -17,8 +19,7 @@ import java.time.Duration;
 import java.util.Set;
 
 import static java.time.Duration.ofSeconds;
-import static utils.TestRunner.getElementCenterPoint;
-import static utils.TestRunner.printToLog;
+import static utils.TestRunner.*;
 
 public abstract class BasePage {
 
@@ -100,7 +101,7 @@ public abstract class BasePage {
         try {
             Thread.sleep(5000);
             for (int i = 0; i < numOfExpectedAlerts; i++) {
-                wait.until(ExpectedConditions.elementToBeClickable(By.id("com.android.packageinstaller:id/permission_allow_button"))).click();
+                wait.until(ExpectedConditions.visibilityOf(((AndroidDriver) mobileDriver).findElementByAndroidUIAutomator("new UiSelector().className(\"android.widget.Button\").textContains(\"ALLOW\")"))).click();
                 printToLog("Alert was accepted (" + (i + 1) + "/" + numOfExpectedAlerts + ")");
             }
         } catch (Exception ex) {

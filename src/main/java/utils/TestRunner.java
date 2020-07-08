@@ -61,7 +61,7 @@ public class TestRunner {
         report.log(content);
     }
 
-    public static List<String> getAllConnectedDevices() {
+    public static List<String> getAllConnectedDevicesUdid() {
         String line;
         List<String> connectedDevices = new ArrayList<String>();
         try {
@@ -86,6 +86,31 @@ public class TestRunner {
         return connectedDevices;
     }
 
+    public static String getConnectedDeviceName() {
+        String line;
+        String connectedDeviceName = "";
+        try {
+            Runtime rt = java.lang.Runtime.getRuntime();
+            // Start a new process: UNIX command ls
+            Process p = rt.exec("adb devices -l");
+            // Get process’ output: its InputStream
+            InputStream is = p.getInputStream();
+            BufferedReader reader = new java.io.BufferedReader(new InputStreamReader(is));
+            // And print each line
+            line = (reader.readLine());
+            while ((line = reader.readLine()) != null) {
+                if (line.contains("product")) {
+                    connectedDeviceName = line.split(" ")[19].substring(7);
+                }
+            }
+            is.close();
+
+        } catch (Exception ex) {
+            printToLog("TestRunner.getConnectedDeviceName: " + ex.getMessage());
+        }
+        return connectedDeviceName;
+    }
+
     public static void sendKeysAsChars(WebElement webElement, String str) {
         if (webElement != null && str.length() != 0) {
             for (int i = 0; i < str.length(); i++) {
@@ -94,6 +119,29 @@ public class TestRunner {
                 webElement.sendKeys(s);
             }
         }
+    }
+
+    public static String getConnectedDeviceOsVersion() {
+        String line;
+        String osVersion = "";
+        try {
+            Runtime rt = java.lang.Runtime.getRuntime();
+            // Start a new process: UNIX command ls
+            Process p = rt.exec("adb shell getprop ro.build.version.release");
+            // Get process’ output: its InputStream
+            InputStream is = p.getInputStream();
+            BufferedReader reader = new java.io.BufferedReader(new InputStreamReader(is));
+            // And print each line
+            line = (reader.readLine());
+            osVersion = line;
+            if (osVersion.length() > 0) {
+//                printToLog("Android version: " + osVersion);
+            }
+            is.close();
+        } catch (Exception ex) {
+            printToLog("TestRunner.getConnectedDeviceOsVersion: " + ex.getMessage());
+        }
+        return osVersion;
     }
 
     public static int getCharKeyCode(String str) {
